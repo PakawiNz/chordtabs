@@ -14,6 +14,9 @@ urlpatterns = patterns('',
     url(r'^favorite/$', views.favorite),
     url(r'^login/$', views.login),
     url(r'^logout/$', views.logout),
-    url(r'^search/(\w+)/$', views.search),
     url(r'^view_chord/(\w+)/$', views.view_chord),
+    url(r'^set_favorite/(\w+)/$', views.set_favorite),
+    url(r'^unset_favorite/(\w+)/$', views.unset_favorite),
+    
+    url(r'^search/', views.search),
 )

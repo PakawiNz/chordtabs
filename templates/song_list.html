@@ -1,0 +1,34 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Code</th>
+      <th>Description</th>
+      <th>View</th>
+      <th><span class="glyphicon glyphicon-star"></span></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for song in songs %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td><a href="/view_chord/{{song.code}}/">{{ song.code }}</a></td>
+      <td>{{ song.description }}</td>
+      <td>{{ song.view }}</td>
+      {% if not song.favorite %}
+      <td>
+        <a class="btn btn-xs btn-default" href="/set_favorite/{{song.code}}/">
+          <span class="glyphicon glyphicon-star-empty"></span>
+        </a>
+      </td>
+      {% else %}
+      <td>
+        <a class="btn btn-xs btn-warning" href="/unset_favorite/{{song.code}}/">
+          <span class="glyphicon glyphicon-star"></span>
+        </a>
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
