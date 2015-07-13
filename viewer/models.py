@@ -1,4 +1,7 @@
 from django.db import models
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+import os,urllib2
 
 # Create your models here.
 
@@ -19,8 +22,22 @@ class Song(models.Model):
 	artist = models.ForeignKey('Artist',default=None,null=True)
 	album = models.ForeignKey('Album',default=None,null=True)
 	description = models.TextField(default="")
-	chord = models.ImageField(default="")
-	viewed = models.ManyToManyField('User', through='View')
+	chord_image = models.ImageField(default="",upload_to='chords')
+	chord_url = models.URLField(default="")
+
+	def get_remote_chord(self):
+		if not self.chord_url :
+			return
+
+		if not self.chord_image or not os.path.isfile(self.chord_image.path):
+			img_temp = NamedTemporaryFile()
+			img_temp.write(urllib2.urlopen(self.chord_url).read())
+			img_temp.flush()
+
+			self.chord_image.save(os.path.basename(self.chord_url),
+					File(img_temp)
+				)
+			self.save()
 
 class User(models.Model):
 	id = models.AutoField(primary_key=True)
