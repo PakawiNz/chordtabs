@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block "body" %}
+  <div class="page-header">
+    <h1>Tables</h1>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Code</th>
+            <th>Description</th>
+            <th>View</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for song in songs %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><a href="/view_chord/{{song.code}}/">{{ song.code }}</a></td>
+            <td>{{ song.description }}</td>
+            <td>{{ song.view }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
