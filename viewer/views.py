@@ -1,6 +1,6 @@
 # -*- utf-8 -*-
 from django.shortcuts import render,redirect
-import urllib2,re
+import urllib2,re,threading,Queue
 
 from .models import User,Song,View,models
 
@@ -16,13 +16,38 @@ def get_user(request):
 	except :
 		return None
 
+def _download(q,song):
+	try :
+		result = find_chord_image(song)
+		print result
+	except Exception as e :
+		result = None
+		q.put(song)
+		print e
+
+def download_all():
+	songs = Song.objects.filter(chord_url="").values_list('code',flat=True)
+	q = Queue.Queue()
+	for song in songs :
+		_download(q, song)
+
+	while not q.empty():
+		_download(q,q.get())
+
 def refresh(request):
+	# return download_all()
 	# tempfile = open('noob.txt','w')
-	# f = urllib2.urlopen(urllib2.Request(url=CHORDTABS_SRC_URL))
-	# tempfile.write(f.read())
-	tempfile = open('noob.txt','r')
-	temp = tempfile.read()
+	f = urllib2.urlopen(urllib2.Request(url=CHORDTABS_SRC_URL))
+	temp = f.read()
+	print "GOT SOURCE HTML PAGE"
+
+	# tempfile = open('noob.txt','r')
+	# tempfile.write(temp)
+	# temp = tempfile.read()
+	# tempfile.close()
+
 	allsong = re.findall(r'<a\s+href="[^"]+=(\d+)".*title=\'(.*)\'', temp)
+	print "GOT SOURCE %d SONGS"%(len(allsong))
 
 	songs = []
 	codes = set(Song.objects.values_list('code',flat=True))
@@ -30,10 +55,14 @@ def refresh(request):
 		if int(sid) in codes :
 			continue
 		songs.append(Song(code=sid,description=desc))
+		
+	print "CREATE NEW %d SONGS"%(len(songs))
 	Song.objects.bulk_create(songs)
 
-	tempfile.close()
-	return render(request,"index.html",get_context(request))	
+	print "GET CHORD IMAGE URL"
+	download_all()
+
+	return redirect('/')	
 
 def find_chord_image(song__code):
 	song = Song.objects.get(code=song__code)
@@ -47,10 +76,11 @@ def find_chord_image(song__code):
 		else :
 			return ""
 
-	if not song.chord_image :
-		song.get_remote_chord()
+	return song.chord_url
+	# if not song.chord_image :
+	# 	song.get_remote_chord()
 
-	return "/media/%s"%(song.chord_image)
+	# return "/media/%s"%(song.chord_image)
 
 def get_context(request):
 	context = {}
