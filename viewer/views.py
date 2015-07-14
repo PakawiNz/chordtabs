@@ -26,7 +26,7 @@ def _download(q,song):
 		print e
 
 def download_all():
-	songs = Song.objects.filter(chord_url="").values_list('code',flat=True)
+	songs = Song.objects.filter(chord_image="").values_list('code',flat=True)
 	q = Queue.Queue()
 	for song in songs :
 		_download(q, song)
@@ -35,8 +35,11 @@ def download_all():
 		_download(q,q.get())
 
 def refresh(request):
-	# return download_all()
-	# tempfile = open('noob.txt','w')
+
+	print "GET CHORD IMAGE URL"
+	download_all()
+	return redirect('/')	
+
 	f = urllib2.urlopen(urllib2.Request(url=CHORDTABS_SRC_URL))
 	temp = f.read()
 	print "GOT SOURCE HTML PAGE"
@@ -59,9 +62,6 @@ def refresh(request):
 	print "CREATE NEW %d SONGS"%(len(songs))
 	Song.objects.bulk_create(songs)
 
-	print "GET CHORD IMAGE URL"
-	download_all()
-
 	return redirect('/')	
 
 def find_chord_image(song__code):
@@ -76,11 +76,11 @@ def find_chord_image(song__code):
 		else :
 			return ""
 
-	return song.chord_url
-	# if not song.chord_image :
-	# 	song.get_remote_chord()
+	# return song.chord_url
+	if not song.chord_image :
+		song.get_remote_chord()
 
-	# return "/media/%s"%(song.chord_image)
+	return "/media/%s"%(song.chord_image)
 
 def get_context(request):
 	context = {}

@@ -1,9 +1,23 @@
 from django.db import models
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
-import os,urllib2
+import os,urllib2,shutil
 
 # Create your models here.
+CHORDTABS_OLD_DIR = 'E:\Downloads\Chords'
+CHORDTABS_NEW_DIR = 'C:\Workspace\chordtabs\media'
+
+def _copyfromoldproject():
+	_all = Song.objects.all().values_list('chord_image',flat=True)
+	for path in _all :
+		path = os.path.join(CHORDTABS_NEW_DIR,path)
+		condition = not os.path.isfile(path) or os.stat(path).st_size < 10000
+		if condition :
+			afile = os.path.basename(path)
+			oldpath = os.path.join(CHORDTABS_OLD_DIR,'c' + afile)
+			if os.path.isfile(oldpath) :
+				print path,oldpath
+				shutil.copyfile(oldpath,path)
 
 class Album(models.Model):
 	id = models.IntegerField(primary_key=True)
@@ -30,13 +44,14 @@ class Song(models.Model):
 			return
 
 		if not self.chord_image or not os.path.isfile(self.chord_image.path):
+			filename = os.path.basename(self.chord_url)
+			oldpath = os.path.join(CHORDTABS_OLD_DIR,'c' + filename)
+
 			img_temp = NamedTemporaryFile()
 			img_temp.write(urllib2.urlopen(self.chord_url).read())
 			img_temp.flush()
 
-			self.chord_image.save(os.path.basename(self.chord_url),
-					File(img_temp)
-				)
+			self.chord_image.save(filename,File(img_temp))
 			self.save()
 
 class User(models.Model):
