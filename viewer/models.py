@@ -62,7 +62,25 @@ class User(models.Model):
 
 class View(models.Model):
 	id = models.AutoField(primary_key=True)
-	song = models.ForeignKey('Song')
-	user = models.ForeignKey('User')
+	song = models.ForeignKey('Song',related_name='views')
+	user = models.ForeignKey('User',null=True)
 	count = models.IntegerField(default=0)
 	isFavorite = models.BooleanField(default=False)
+
+class Playlist(models.Model):
+	id = models.AutoField(primary_key=True)
+	owner = models.ForeignKey('User')
+	name = models.CharField(max_length=50)
+	description = models.TextField()
+
+	class META :
+		unique_together = (('owner','name'),)
+
+class PlaylistItem(models.Model):
+	id = models.AutoField(primary_key=True)
+	number = models.IntegerField()
+	song = models.ForeignKey('Song')
+	playlist = models.ForeignKey('Playlist',related_name='items')
+
+	class META :
+		unique_together = (('number','playlist'),('song','playlist'))

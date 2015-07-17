@@ -4,18 +4,22 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf" content="{{ csrf_token }}">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 	<title>ChordTabs : Extractor</title>
 
-	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="/static/css/jquery-ui.min.css">
+  <link rel="stylesheet" href="/static/css/jquery-ui.structure.min.css">
+	<link rel="stylesheet" href="/static/css/jquery-ui.theme.min.css">
 </head>
 <style type="text/css">
 	
 </style>
 <body>
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -29,7 +33,22 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
+            {% if user %}
             <li><a href="/favorite">Favorite</a></li>
+            <li><a href="/playlist">Playlist</a></li>
+            {% endif %}
+            <li >
+              <form class="nav navbar-form" method="GET" action="/search/">
+                <div class="input-group">
+                  <input type="text" name="keyword" placeholder="Keyword" class="form-control">
+                  <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default">
+                      <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                  </span>
+                </div>
+              </form>
+            </li>
           </ul>
           {% if not user %}
           <form class="navbar-form navbar-right" method="POST" action="/login/">
@@ -57,26 +76,16 @@
 
     <div class="container theme-showcase" role="main">
 
-      <!-- Main jumbotron for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <form class="" method="GET" action="/search/">
-          <div class="col-md-6" style="padding-top: 10px;">
-            <h1>Welcome</h1>
-          </div>
-          <div class="input-group col-md-6" style="padding-top: 50px;">
-            <input type="text" name="keyword" placeholder="Keyword" class="form-control">
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-success">Search</button>
-            </span>
-          </div>
-        </form>
-      </div>
-
 {% block "body" %}
 {% endblock %}
 
     </div> <!-- /container -->
-	<script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+	<script src="/static/js/jquery-ui.min.js"></script>
 	<script src="/static/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/static/js/common.js"></script>
+
+  {% include 'modal.html' %}
+
 </body>
 </html>

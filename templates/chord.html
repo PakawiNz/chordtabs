@@ -11,14 +11,20 @@
 	      </td>
 	      {% else %}
 	      <td>
-	        <a class="btn btn-warning" href="/unset_favorite/{{code}}/">
-	          <span class="glyphicon glyphicon-star"></span>
-	        </a>
+	      	<div class="btn-group">
+		        <a class="btn btn-warning" href="/unset_favorite/{{code}}/">
+		          <span class="glyphicon glyphicon-star"></span>
+		        </a>
+	            <button class="btn btn-default" data-song="{{code}}"
+	                data-toggle="modal" data-target="#playlist">
+	              <span class="glyphicon glyphicon-list"></span>
+	            </button>
+	      	</div>
 	      </td>
 	      {% endif %}
 	    </div>
-	    <div class="">
-	    	<img src="{{chord}}"></div>
+	    <div class="col-md-12">
+	    	<img src="{{chord}}" class="img-rounded img-responsive center-block"></div>
 	    </div>
     </div>
   </div>

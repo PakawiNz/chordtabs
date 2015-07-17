@@ -1,0 +1,32 @@
+<div class="modal fade" id="playlist" tabindex="-1" role="dialog" aria-labelledby="playlist-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="playlist-label">Add to playlist</h4>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" class="form-control" id="playlist-song">
+        <div class="playlist-list btn-group-vertical" style="width:100%;">
+          <button type="button" class="btn btn-info" id="create-playlist-open">CREATE NEW PLAYLIST</button>
+          <div class="modal-body" id="create-playlist-panel" style="display:none;">
+            <form id="create-playlist-form">
+              <div class="form-group">
+                <label for="create-playlist-name" class="control-label">Name:</label>
+                <input type="text" class="form-control" name="create-playlist-name" id="create-playlist-name">
+              </div>
+              <div class="form-group">
+                <label for="create-playlist-desc" class="control-label">Description:</label>
+                <textarea class="form-control" name="create-playlist-desc" id="create-playlist-desc"></textarea>
+              </div>
+              <button type="button" class="btn btn-primary" id="create-playlist-done">Create Playlist</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
