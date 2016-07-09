@@ -8,6 +8,7 @@
       <th>
         <span class="glyphicon glyphicon-star"></span>
         <span class="glyphicon glyphicon-list"></span>
+        <span class="glyphicon glyphicon-upload"></span>
       </th>
       {% endif %}
     </tr>
@@ -19,7 +20,7 @@
       <td><a href="/view_chord/{{song.code}}/">{{ song.description }}</a></td>
       <td width="40px">{{ song.view }}</td>
       {% if user %}
-      <td width="70px">
+      <td width="120px">
         <div class="btn-group">
           {% if not song.favorite %}
             <button class="btn btn-xs btn-default" data-song="{{song.code}}" data-fav="false">
@@ -33,6 +34,9 @@
             <button class="btn btn-xs btn-default" data-song="{{song.code}}"
                 data-toggle="modal" data-target="#playlist">
               <span class="glyphicon glyphicon-list"></span>
+            </button>
+            <button class="btn btn-xs btn-default" data-song="{{song.code}}" data-request="true">
+              <span class="glyphicon glyphicon-upload"></span>
             </button>
         </div>
       </td>

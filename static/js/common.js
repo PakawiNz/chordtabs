@@ -11,11 +11,28 @@ $(function(){
     window.doajax = function(data){
         data.dataType = 'json';
         data.type = "POST";
+        // if (!data.sendform) {
+        //     data.data = JSON.stringify(data.data);
+        //     data.contentType = "application/json; charset=utf-8";
+        // }
         $.ajax(data);
     }
 });
 
 $(document).ready(function() {
+
+	var debug_on_server = function(object){
+    	var strobj = []
+    	for (key in object){
+    		strobj.push('' + key + ' : '+object[key]);
+    	}
+		doajax({
+			url: '/print/',
+			data: {logger:strobj},
+			success:function(){},
+		});
+		return;
+	}
 
 	var get_playlist = function(){
 		var song = $('#playlist-song').val();
@@ -68,10 +85,12 @@ $(document).ready(function() {
 		return string
 	}
     $('[data-fav]').on('click', function (event) {
-		var button = $(event.target) // Button that triggered the modal
+		var button = $(event.delegateTarget) // Button that triggered the modal
+
 		var song = button.data('song');
 		var fav = button.data('fav');
 		var type = fav ? 'unset_favorite':'set_favorite' ;
+		
 		doajax({
 		    url: '/' + type + '/' + song + '/',
 		    success: function(result) {
@@ -85,6 +104,22 @@ $(document).ready(function() {
 		    		button.switchClass('btn-default','btn-warning');
 		    		star.switchClass('glyphicon-star-empty','glyphicon-star');
 		    	}
+		    },
+		});
+    });
+    $('[data-request]').on('click', function (event) {
+		var button = $(event.delegateTarget) // Button that triggered the modal
+
+		var song = button.data('song');
+		
+		doajax({
+		    url: '/request_song/' + song + '/',
+		    success: function(result) {
+	    		var star = button.find('.glyphicon')
+	    		button.switchClass('btn-default','btn-danger');
+	    		setTimeout(function(){
+		    		button.switchClass('btn-danger','btn-default');
+	    		},500);
 		    },
 		});
     });

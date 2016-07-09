@@ -36,7 +36,8 @@ class Song(models.Model):
 	artist = models.ForeignKey('Artist',default=None,null=True)
 	album = models.ForeignKey('Album',default=None,null=True)
 	description = models.TextField(default="")
-	chord_image = models.ImageField(default="",upload_to='chords')
+	chord_image = models.TextField(default="")
+	# chord_image = models.ImageField(default="",upload_to='chords')
 	chord_url = models.URLField(default="")
 
 	def get_remote_chord(self):

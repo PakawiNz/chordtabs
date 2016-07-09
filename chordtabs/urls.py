@@ -1,17 +1,14 @@
+from django.conf.urls.static import static
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
+
 from viewer import views
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'chordtabs.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
+urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^$', views.homepage),
-    url(r'^refresh/$', views.refresh),
     url(r'^login/$', views.login),
     url(r'^logout/$', views.logout),
 
@@ -21,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^playlist/$', views.playlist),
     url(r'^search/', views.search),
     
+    url(r'^request_song/(\w+)/$', views.request_song),
     url(r'^set_favorite/(\w+)/$', views.set_favorite),
     url(r'^unset_favorite/(\w+)/$', views.unset_favorite),
 
@@ -28,10 +26,4 @@ urlpatterns = patterns('',
     url(r'^new-playlist/$', views.new_playlist),
     url(r'^del-playlist/(\w+)/$', views.del_playlist),
     url(r'^add-to-playlist/$', views.add_to_playlist),
-)
-
-if settings.DEBUG:
-    # static files (images, css, javascript, etc.)
-    urlpatterns += patterns('',
-        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
-        'document_root': settings.MEDIA_ROOT}))
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
