@@ -1,13 +1,16 @@
 from django.contrib import admin
-from .models import User,Song
 
-# Register your models here.
+from viewer.models import User, Song
+
 
 class UserAdmin(admin.ModelAdmin):
-	field = ('username','password')
+    field = ('username', 'password')
+
 
 class SongAdmin(admin.ModelAdmin):
-	pass
+    list_display = ('code', 'description', 'chord_image',)
+    search_fields = ('description',)
 
-admin.register(User,UserAdmin)
-admin.register(Song,SongAdmin)
+
+admin.site.register(User, UserAdmin)
+admin.site.register(Song, SongAdmin)

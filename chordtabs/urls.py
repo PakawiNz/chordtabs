@@ -1,5 +1,5 @@
 from django.conf.urls.static import static
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 
@@ -18,7 +18,11 @@ urlpatterns = [
     url(r'^playlist/$', views.playlist),
     url(r'^search/', views.search),
     
+    url(r'^play_request/(\w+)/$', views.play_request),
     url(r'^request_song/(\w+)/$', views.request_song),
+    url(r'^request_view/$', views.request_view),
+    url(r'^request_view/(\d+)/$', views.request_view),
+    
     url(r'^set_favorite/(\w+)/$', views.set_favorite),
     url(r'^unset_favorite/(\w+)/$', views.unset_favorite),
 

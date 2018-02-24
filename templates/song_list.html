@@ -4,11 +4,13 @@
       <th>#</th>
       <th>Name</th>
       <th>View</th>
+      <th>
+        <span class="glyphicon glyphicon-upload"></span>
+      </th>
       {% if user %}
       <th>
         <span class="glyphicon glyphicon-star"></span>
         <span class="glyphicon glyphicon-list"></span>
-        <span class="glyphicon glyphicon-upload"></span>
       </th>
       {% endif %}
     </tr>
@@ -17,8 +19,17 @@
     {% for song in songs %}
     <tr>
       <td>{{ forloop.counter }}</td>
+      {% if requesting %}
+      <td><a href="/play_request/{{song.code}}/">{{ song.description }}</a></td>
+      {% else %}
       <td><a href="/view_chord/{{song.code}}/">{{ song.description }}</a></td>
+      {% endif %}
       <td width="40px">{{ song.view }}</td>
+      <td>
+          <button class="btn btn-xs btn-default" data-song="{{song.code}}" data-request="true">
+            <span class="glyphicon glyphicon-upload"></span>
+          </button>
+      </td>
       {% if user %}
       <td width="120px">
         <div class="btn-group">
@@ -34,9 +45,6 @@
             <button class="btn btn-xs btn-default" data-song="{{song.code}}"
                 data-toggle="modal" data-target="#playlist">
               <span class="glyphicon glyphicon-list"></span>
-            </button>
-            <button class="btn btn-xs btn-default" data-song="{{song.code}}" data-request="true">
-              <span class="glyphicon glyphicon-upload"></span>
             </button>
         </div>
       </td>
