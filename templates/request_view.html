@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block "body" %}
+	<div>
+		<div class="btn-group">
+			{% if prev != None %}
+			<a class="btn btn-default" href="/request_view/{{prev}}">
+				<span class="glyphicon glyphicon-backward"></span>
+			</a>
+			{% endif %}
+			{% if next != None %}
+			<a class="btn btn-default" href="/request_view/{{next}}">
+				<span class="glyphicon glyphicon-forward"></span>
+			</a>
+			{% endif %}
+		</div>
+		<div class="col-md-12" style="text-align: center;">
+			<div class="col-md-12">
+				<img src="{{chord}}" class="img-rounded img-responsive center-block"></div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		setTimeout(function(){
+			window.location.reload();
+		},10000);
+	</script>
+{% endblock %}
