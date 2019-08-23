@@ -5,9 +5,6 @@ from django.db import models
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 
-CHORDTABS_OLD_DIR = 'E:\Downloads\Chords'
-CHORDTABS_NEW_DIR = 'C:\Workspace\chordtabs\media'
-
 
 class Album(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -25,8 +22,8 @@ class Song(models.Model):
     id = models.AutoField(primary_key=True)
     code = models.IntegerField(unique=True, default=0)
     name = models.TextField(default="")
-    artist = models.ForeignKey('Artist', default=None, null=True)
-    album = models.ForeignKey('Album', default=None, null=True)
+    artist = models.ForeignKey('Artist', models.CASCADE, default=None, null=True)
+    album = models.ForeignKey('Album', models.CASCADE, default=None, null=True)
     description = models.TextField(default="")
     chord_image = models.ImageField(default="", upload_to='chords')
     chord_url = models.URLField(default="")
@@ -55,15 +52,15 @@ class User(models.Model):
 
 class View(models.Model):
     id = models.AutoField(primary_key=True)
-    song = models.ForeignKey('Song', related_name='views')
-    user = models.ForeignKey('User', null=True)
+    song = models.ForeignKey('Song', models.CASCADE, related_name='views')
+    user = models.ForeignKey('User', models.CASCADE, null=True)
     count = models.IntegerField(default=0)
     isFavorite = models.BooleanField(default=False)
 
 
 class Playlist(models.Model):
     id = models.AutoField(primary_key=True)
-    owner = models.ForeignKey('User')
+    owner = models.ForeignKey('User', models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.TextField()
 
@@ -74,8 +71,16 @@ class Playlist(models.Model):
 class PlaylistItem(models.Model):
     id = models.AutoField(primary_key=True)
     number = models.IntegerField()
-    song = models.ForeignKey('Song')
-    playlist = models.ForeignKey('Playlist', related_name='items')
+    song = models.ForeignKey('Song', models.CASCADE)
+    playlist = models.ForeignKey('Playlist', models.CASCADE, related_name='items')
 
     class META:
         unique_together = (('number', 'playlist'), ('song', 'playlist'))
+
+
+class Room(models.Model):
+    code = models.CharField(max_length=100)
+
+class RoomItem(models.Model):
+    room = models.ForeignKey('Room', models.CASCADE)
+    song = models.ForeignKey('Song', models.CASCADE)

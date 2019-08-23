@@ -1,0 +1,20 @@
+{
+    "files.exclude": {
+        "**/.firebase": true,
+        "**/dist": true,
+        "**/node_modules": true,
+        "**/lib": true,
+    },
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "html.format.wrapLineLength": 120,
+    "vetur.format.defaultFormatterOptions": {
+        "prettyhtml": {
+            "printWidth": 120,
+            "singleQuote": false,
+        }
+    },
+}

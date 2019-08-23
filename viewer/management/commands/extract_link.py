@@ -1,5 +1,5 @@
 import re
-import urllib.request
+import requests
 
 from django.core.management.base import BaseCommand
 
@@ -11,9 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print("GET CHORD IMAGE URL")
 
-        with urllib.request.urlopen(CHORDTABS_SRC_URL) as url:
-            bytes().decode()
-            temp = url.read().decode('utf-8')
+        temp = requests.get(CHORDTABS_SRC_URL).text
 
         print("GOT SOURCE HTML PAGE")
 
@@ -26,10 +24,14 @@ class Command(BaseCommand):
 
         songs = []
         codes = set(Song.objects.values_list('code', flat=True))
-        for sid, desc in allsong:
-            if int(sid) in codes:
+        for song_code, description in allsong:
+            song_code = int(song_code)
+            if song_code in codes:
                 continue
-            songs.append(Song(code=sid, description=desc))
+
+            codes.add(song_code)
+            song = Song(code=song_code, description=description)
+            songs.append(song)
 
         print("CREATE NEW %d SONGS" % (len(songs)))
         Song.objects.bulk_create(songs)

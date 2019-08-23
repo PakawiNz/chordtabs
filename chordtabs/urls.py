@@ -1,33 +1,21 @@
-from django.conf.urls.static import static
-from django.conf.urls import include, url
-from django.contrib import admin
 from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import path
+from rest_framework import routers
 
-from viewer import views
+from viewer.views import SongViewSet, create_room, add_to_room, remove_from_room, index
+
+router = routers.SimpleRouter()
+router.register(r'api/songs', SongViewSet)
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    path('', index),
+    path('admin/', admin.site.urls),
+    path('api/create_room/', create_room),
+    path('api/add_to_room/<int:room>/<int:song>/', add_to_room),
+    path('api/remove_from_room/<int:room>/<int:song>/', remove_from_room),
+]
 
-    url(r'^$', views.homepage),
-    url(r'^login/$', views.login),
-    url(r'^logout/$', views.logout),
-
-    url(r'^view_playlist/(\w+)/$', views.view_playlist),
-    url(r'^view_chord/(\w+)/$', views.view_chord),
-    url(r'^favorite/$', views.favorite),
-    url(r'^playlist/$', views.playlist),
-    url(r'^search/', views.search),
-    
-    url(r'^play_request/(\w+)/$', views.play_request),
-    url(r'^request_song/(\w+)/$', views.request_song),
-    url(r'^request_view/$', views.request_view),
-    url(r'^request_view/(\d+)/$', views.request_view),
-    
-    url(r'^set_favorite/(\w+)/$', views.set_favorite),
-    url(r'^unset_favorite/(\w+)/$', views.unset_favorite),
-
-    url(r'^get-playlist/$', views.get_playlist),
-    url(r'^new-playlist/$', views.new_playlist),
-    url(r'^del-playlist/(\w+)/$', views.del_playlist),
-    url(r'^add-to-playlist/$', views.add_to_playlist),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += router.urls
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
